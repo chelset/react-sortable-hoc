@@ -164,7 +164,7 @@ export default function sortableContainer(
         }
 
         if (!distance) {
-          if (this.props.pressDelay === 0) {
+          if (!isTouchEvent(event) || this.props.pressDelay === 0) {
             this.handlePress(event);
           } else {
             this.pressTimer = setTimeout(
@@ -634,9 +634,9 @@ export default function sortableContainer(
 
         // For keyboard sorting, we want user input to dictate the position of the nodes
         const mustShiftBackward =
-          isKeySorting && (index > this.index && index <= prevIndex);
+          isKeySorting && index > this.index && index <= prevIndex;
         const mustShiftForward =
-          isKeySorting && (index < this.index && index >= prevIndex);
+          isKeySorting && index < this.index && index >= prevIndex;
 
         const translate = {
           x: 0,
