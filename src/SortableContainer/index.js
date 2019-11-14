@@ -164,12 +164,22 @@ export default function sortableContainer(
         }
 
         if (!distance) {
-          if (!isTouchEvent(event) || this.props.pressDelay === 0) {
+          const pressDelay =
+            typeof this.props.pressDelay === 'function'
+              ? this.props.pressDelay(event)
+              : this.props.pressDelay;
+
+          invariant(
+            typeof pressDelay === 'number',
+            'pressDelay prop of SortableContainer should return a Number when passed as a function',
+          );
+
+          if (pressDelay === 0) {
             this.handlePress(event);
           } else {
             this.pressTimer = setTimeout(
               () => this.handlePress(event),
-              this.props.pressDelay,
+              pressDelay,
             );
           }
         }
