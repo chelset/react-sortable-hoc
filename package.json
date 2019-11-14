@@ -1,13 +1,11 @@
 {
-  "name": "react-sortable-hoc",
-  "version": "1.10.1",
+  "name": "@seesaw/react-sortable-hoc",
+  "version": "0.1.0",
   "description": "Set of higher-order components to turn any list into a sortable, touch-friendly, animated list",
   "author": {
-    "name": "Clauderic Demers",
-    "email": "me@ced.io"
+    "name": "Chelse Tsai-Simek",
+    "email": "chelse@seesaw.me"
   },
-  "user": "clauderic",
-  "homepage": "https://github.com/clauderic/react-sortable-hoc",
   "source": "src/index.js",
   "main": "dist/react-sortable-hoc.js",
   "umd:main": "dist/react-sortable-hoc.umd.js",
@@ -15,37 +13,12 @@
   "jsnext:main": "dist/react-sortable-hoc.esm.js",
   "types": "types/index.d.ts",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/clauderic/react-sortable-hoc.git"
-  },
-  "bugs": {
-    "url": "https://github.com/clauderic/react-sortable-hoc/issues"
-  },
-  "keywords": [
-    "react",
-    "reactjs",
-    "react-component",
-    "sortable",
-    "sortable-list",
-    "list",
-    "sortable list",
-    "smooth",
-    "animated",
-    "hoc",
-    "higher-order",
-    "component"
-  ],
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
+    "prepare": "npm run build",
     "build": "rollup -c",
     "test": "eslint src/** --ext .js --quiet",
     "release": "standard-version --no-verify"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   },
   "dependencies": {
     "@babel/runtime": "^7.2.0",
