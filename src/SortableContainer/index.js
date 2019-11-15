@@ -28,13 +28,7 @@ import {
 } from '../utils';
 
 import AutoScroller from '../AutoScroller';
-import {
-  defaultProps,
-  omittedProps,
-  propTypes,
-  validateProps,
-  defaultKeyCodes,
-} from './props';
+import {defaultProps, omittedProps, propTypes, defaultKeyCodes} from './props';
 
 export default function sortableContainer(
   WrappedComponent,
@@ -43,8 +37,6 @@ export default function sortableContainer(
   return class WithSortableContainer extends React.Component {
     constructor(props) {
       super(props);
-
-      validateProps(props);
 
       this.manager = new Manager();
       this.events = {
@@ -154,24 +146,24 @@ export default function sortableContainer(
 
         this.manager.active = {collection, index};
 
+        const isTouch = isTouchEvent(event);
+
         /*
          * Fixes a bug in Firefox where the :active state of anchor tags
          * prevent subsequent 'mousemove' events from being fired
          * (see https://github.com/clauderic/react-sortable-hoc/issues/118)
          */
-        if (!isTouchEvent(event) && event.target.tagName === NodeType.Anchor) {
+        if (!isTouch && event.target.tagName === NodeType.Anchor) {
           event.preventDefault();
         }
 
-        if (!distance) {
-          if (!isTouchEvent(event) || this.props.pressDelay === 0) {
-            this.handlePress(event);
-          } else {
-            this.pressTimer = setTimeout(
-              () => this.handlePress(event),
-              this.props.pressDelay,
-            );
-          }
+        if (isTouch && this.props.pressDelay !== 0) {
+          this.pressTimer = setTimeout(
+            () => this.handlePress(event),
+            this.props.pressDelay,
+          );
+        } else if (isTouch || !distance) {
+          this.handlePress(event);
         }
       }
     };
@@ -195,12 +187,16 @@ export default function sortableContainer(
         };
         const combinedDelta = Math.abs(delta.x) + Math.abs(delta.y);
 
-        this.delta = delta;
+        const isTouch = isTouchEvent(event);
 
-        if (!distance && (!pressThreshold || combinedDelta >= pressThreshold)) {
+        if (
+          (isTouch || !distance) &&
+          (!pressThreshold || combinedDelta >= pressThreshold)
+        ) {
           clearTimeout(this.cancelTimer);
           this.cancelTimer = setTimeout(this.cancel, 0);
         } else if (
+          !isTouch &&
           distance &&
           combinedDelta >= distance &&
           this.manager.isActive()
@@ -220,7 +216,7 @@ export default function sortableContainer(
       const {sorting} = this.state;
 
       if (!sorting) {
-        if (!distance) {
+        if (isTouchEvent || !distance) {
           clearTimeout(this.pressTimer);
         }
         this.manager.active = null;

@@ -75,10 +75,3 @@ export const defaultProps = {
 };
 
 export const omittedProps = Object.keys(propTypes);
-
-export function validateProps(props) {
-  invariant(
-    !(props.distance && props.pressDelay),
-    'Attempted to set both `pressDelay` and `distance` on SortableContainer, you may only use one or the other, not both at the same time.',
-  );
-}
